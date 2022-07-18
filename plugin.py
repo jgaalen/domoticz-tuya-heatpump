@@ -61,7 +61,8 @@ def onHeartbeat():
 
         res = res[2:len(res) - 3]
         res = res.replace("'", "\"")
-
+        res = res.replace("\\n", "")
+        
         objects = json.loads(res)
         Domoticz.Debug("Poolex values:")
         Domoticz.Debug("Switch: " + str(objects['1']))
