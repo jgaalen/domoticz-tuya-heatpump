@@ -18,18 +18,20 @@ import Domoticz
 import subprocess	#For OS calls
 import json
 
-selectorMap = {'auto': 0,
-               'eco': 10,
-               'cold': 20,
-               'hot': 30}
+selectorMap = {'Auto': 0,
+               'ECO_Heat': 10,
+               'ECO_Cool': 20,
+               'Boost_Heat': 30,
+               'Boost_Cool': 40}
 
-selectorMapReverse = {0: 'auto',
-                      10: 'eco',
-                      20: 'cold',
-                      30: 'hot'}
+selectorMapReverse = {0: 'Auto',
+                      10: 'ECO_Heat',
+                      20: 'ECO_Cool',
+                      30: 'Boost_Heat',
+                      40: 'Boost_Cool'}
 
-SourceOptions =  {'LevelActions': '|||',
-                  'LevelNames': 'auto|eco|cold|hot',
+SourceOptions =  {'LevelActions': '||||',
+                  'LevelNames': 'Auto|ECO_Heat|ECO_Cool|Boost_Heat|Boost_Cool',
                   'LevelOffHidden': 'false',
                   'SelectorStyle': '1'}
 
@@ -40,7 +42,7 @@ def proper_round(num, dec=0):
     return float(num[:-1])
 
 def onStart():
-    Domoticz.Log("Domoticz Tuya API - Weau Heatpump plugin start")
+    Domoticz.Log("Domoticz Tuya API - Poolex Heatpump plugin start")
 
     if len(Devices) == 0:
         Domoticz.Log("Domoticz Tuya API - Adding devices")
@@ -49,7 +51,7 @@ def onStart():
         Domoticz.Device(Name="SetPoint", Unit=2, Type=242, Subtype=1).Create()
         Domoticz.Device(Name="Temperature In", Unit=3, Type=80, Subtype=5).Create()
         Domoticz.Device(Name="Mode", Unit=4, TypeName="Selector Switch", Switchtype=18, Options=SourceOptions).Create()
-        Domoticz.Device(Name="Unknown", Unit=6, Type=243, Subtype=31).Create()
+        Domoticz.Device(Name="Unknown", Unit=21, Type=243, Subtype=31).Create()
 
     Domoticz.Heartbeat(int(Parameters["Mode4"]))
     
@@ -61,12 +63,12 @@ def onHeartbeat():
         res = res.replace("'", "\"")
 
         objects = json.loads(res)
-        Domoticz.Debug("Weau values:")
+        Domoticz.Debug("Poolex values:")
         Domoticz.Debug("Switch: " + str(objects['1']))
         Domoticz.Debug("SetPoint: " + str(objects['2']))
-        Domoticz.Debug("Temp In: " + str(objects['3'] / 10))
+        Domoticz.Debug("Temp In: " + str(objects['3']))
         Domoticz.Debug("Mode: " + objects['4'])
-        Domoticz.Debug("Unknown: " + str(objects['6']))
+        Domoticz.Debug("Unknown: " + str(objects['21']))
 
         if (objects['1'] == False and Devices[1].nValue != 0):
             Devices[1].Update(0, 'Off')
@@ -74,11 +76,11 @@ def onHeartbeat():
             Devices[1].Update(1, 'On')
         if (str(objects['2']) != Devices[2].sValue):
             Devices[2].Update(0, str(objects['2']))
-        Devices[3].Update(0, str(objects['3'] / 10))
+        Devices[3].Update(0, str(objects['3']))
         if (str(selectorMap[objects['4']]) != Devices[4].sValue):
             Devices[4].Update(0, str(selectorMap[objects['4']]))
-        if (str(objects['6']) != Devices[6].sValue):
-            Devices[6].Update(0, str(objects['6']))
+        if (str(objects['21']) != Devices[6].sValue):
+            Devices[21].Update(0, str(objects['21']))
 
     except Exception as err:
         Domoticz.Error("Tuya API Error: " + str(err))
