@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """
-Tuyi API - Works with Weau heatpump
+Tuyi API - Works with Poolex heatpump
 """
 """
-<plugin key="TuyaAPI" name="Tuya API - Weau Heatpump" version="0.1" author="Joerek van Gaalen">
+<plugin key="TuyaAPI" name="Tuya API - Poolex Heatpump" version="0.1" author="Joerek van Gaalen">
     <params>
         <param field="Address" label="Heatpump local IP" width="200px" required="true" default="127.0.0.1"/>
         <param field="Mode1" label="Heatpump Tuya ID" width="200px" required="true" default="" />
