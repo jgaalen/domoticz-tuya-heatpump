@@ -5,10 +5,10 @@ Tuyi API - Works with Poolex heatpump
 """
 <plugin key="TuyaAPI" name="Tuya API - Poolex Heatpump" version="0.1" author="Joerek van Gaalen">
     <params>
-        <param field="Address" label="Heatpump local IP" width="200px" required="true" default="127.0.0.1"/>
-        <param field="Mode1" label="Heatpump Tuya ID" width="200px" required="true" default="" />
-        <param field="Mode2" label="Heatpump Tuya key" width="200px" required="true" default="" />
-        <param field="Mode3" label="Heatpump Tuya protocol" width="200px" required="true" default="3.3" />
+        <param field="Address" label="Local IP" width="200px" required="true" default="127.0.0.1"/>
+        <param field="Mode1" label="Tuya ID" width="200px" required="true" default="" />
+        <param field="Mode2" label="Tuya key" width="200px" required="true" default="" />
+        <param field="Mode3" label="Tuya protocol" width="200px" required="true" default="3.3" />
         <param field="Mode4" label="Reading Interval (sec)" width="40px" required="true" default="60" />
     </params>
 </plugin>
@@ -79,7 +79,7 @@ def onHeartbeat():
         Devices[3].Update(0, str(objects['3']))
         if (str(selectorMap[objects['4']]) != Devices[4].sValue):
             Devices[4].Update(0, str(selectorMap[objects['4']]))
-        if (str(objects['21']) != Devices[6].sValue):
+        if (str(objects['21']) != Devices[21].sValue):
             Devices[21].Update(0, str(objects['21']))
 
     except Exception as err:
