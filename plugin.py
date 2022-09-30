@@ -62,25 +62,27 @@ def onHeartbeat():
         res = res[2:len(res) - 3]
         res = res.replace("'", "\"")
         res = res.replace("\\n", "")
-        
+
         objects = json.loads(res)
         Domoticz.Debug("Poolex values:")
-        Domoticz.Debug("Switch: " + str(objects['1']))
-        Domoticz.Debug("SetPoint: " + str(objects['2']))
-        Domoticz.Debug("Temp In: " + str(objects['3']))
-        Domoticz.Debug("Mode: " + objects['4'])
-        Domoticz.Debug("Unknown: " + str(objects['21']))
 
-        if (objects['1'] == False and Devices[1].nValue != 0):
-            Devices[1].Update(0, 'Off')
-        elif (objects['1'] == True and Devices[1].nValue != 1):
-            Devices[1].Update(1, 'On')
-        if (str(objects['2']) != Devices[2].sValue):
+        if ('1' in objects):
+            Domoticz.Debug("Switch: " + str(objects['1']))
+            if (objects['1'] == False and Devices[1].nValue != 0):
+                Devices[1].Update(0, 'Off')
+            elif ('1' in objects and objects['1'] == True and Devices[1].nValue != 1):
+                Devices[1].Update(1, 'On')
+        if ('2' in objects  and str(objects['2']) != Devices[2].sValue):
+            Domoticz.Debug("SetPoint: " + str(objects['2']))
             Devices[2].Update(0, str(objects['2']))
-        Devices[3].Update(0, str(objects['3']))
-        if (str(selectorMap[objects['4']]) != Devices[4].sValue):
+        if ('3' in objects):
+            Domoticz.Debug("Temp In: " + str(objects['3']))
+            Devices[3].Update(0, str(objects['3']))
+        if ('4' in objects and str(selectorMap[objects['4']]) != Devices[4].sValue):
+            Domoticz.Debug("Mode: " + objects['4'])
             Devices[4].Update(0, str(selectorMap[objects['4']]))
-        if (str(objects['21']) != Devices[21].sValue):
+        if ('21' in objects  and str(objects['21']) != Devices[21].sValue):
+            Domoticz.Debug("Unknown: " + str(objects['21']))
             Devices[21].Update(0, str(objects['21']))
 
     except Exception as err:
